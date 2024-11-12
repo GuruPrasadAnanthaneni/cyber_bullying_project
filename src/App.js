@@ -59,7 +59,6 @@ function App() {
           <nav className="nav-buttons">
             <button onClick={() => setActiveComponent('home')}>Home</button>
             <button onClick={() => setActiveComponent('login')}>Login</button>
-            <button onClick={() => setActiveComponent('signup')}>Signup</button>
             <button onClick={() => setActiveComponent('chatbot')}>Chatbot</button>
             <img
               src={profile_logo}
