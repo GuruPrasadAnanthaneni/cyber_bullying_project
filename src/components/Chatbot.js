@@ -1,99 +1,112 @@
-import React, { useState, useRef, useEffect } from 'react';
-import './Chatbot.css';
-import message_logo from '../assets/messagelogo.png'; // Ensure the file path is correct.
+import React, { useState, useEffect, useRef } from "react";
+import "./Chatbot.css";
 
-function Chatbot() {
-  const [messages, setMessages] = useState([
-    { text: "Hello! I'm Billy, your cyberbullying support assistant. How can I help you?", sender: "bot" }
-  ]);
-  const [input, setInput] = useState('');
-  const [isChatbotVisible, setIsChatbotVisible] = useState(false);
+function Chatbot({ onHomeClick }) {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+  const [fileUrl, setFileUrl] = useState(null);
   const messagesEndRef = useRef(null);
-  const [intents, setIntents] = useState([]);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
-    fetch('/intents.json')
-      .then(response => response.json())
-      .then(data => setIntents(data.intents))
-      .catch(error => console.error('Error loading intents:', error));
+    setMessages([
+      {
+        text: "Hello! I'm here to assist you.",
+        sender: "bot",
+      },
+    ]);
   }, []);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  const toggleChatbot = () => {
-    setIsChatbotVisible((prev) => !prev);
-  };
 
   const handleSend = () => {
     if (input.trim()) {
       const userMessage = { text: input, sender: "user" };
       setMessages((prevMessages) => [...prevMessages, userMessage]);
-      setInput('');
+      setInput("");
 
       setTimeout(() => {
         const botResponse = generateResponse(input);
-        setMessages((prevMessages) => [...prevMessages, { text: botResponse, sender: "bot" }]);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: botResponse, sender: "bot" },
+        ]);
       }, 1000);
     }
   };
 
   const generateResponse = (input) => {
-    const lowerInput = input.toLowerCase();
-    for (let intent of intents) {
-      if (intent.examples && intent.examples.some((example) => lowerInput.includes(example.toLowerCase()))) {
-        return intent.responses[Math.floor(Math.random() * intent.responses.length)];
-      }
-    }
-    return "I'm here to help. Could you clarify further?";
+    const responses = [
+      "Thank you for reaching out.",
+      "I'm here to help!",
+      "Can you please elaborate?",
+      "That sounds interesting. Tell me more.",
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSend();
-    }
+    if (e.key === "Enter") handleSend();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploading(true);
+
+    setTimeout(() => {
+      // Simulate file upload success
+      setIsUploading(false);
+      const fakeFileUrl = URL.createObjectURL(file);
+      setFileUrl(fakeFileUrl);
+      console.log("File uploaded successfully:", fakeFileUrl);
+    }, 2000);
+  };
+
+  const toggleChatbot = () => {
+    setIsChatOpen(!isChatOpen);
   };
 
   return (
-    <div>
-      {/* Chat Icon */}
-      <div className="chat-icon" onClick={toggleChatbot}>
-        {message_logo ? (
-          <img src={message_logo} alt="Chat Icon" />
-        ) : (
-          <span>Icon Missing</span> // Fallback text in case the image fails to load.
-        )}
+    <>
+      <div className="chatbot-icon" onClick={toggleChatbot}>
+        <span>💬</span>
       </div>
-
-      {/* Chatbot */}
-      {isChatbotVisible && (
-        <div className="chatbot">
-          <div className="chatbot-header">
-            <h3>Billy - Cyberbullying Support Chatbot</h3>
-            <button className="close-button" onClick={toggleChatbot}>X</button>
-          </div>
-          <div className="chatbot-messages">
-            {messages.map((message, index) => (
-              <div key={index} className={`message ${message.sender}`}>
-                <p>{message.text}</p>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-          <div className="chatbot-input">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Type your message..."
-            />
-            <button onClick={handleSend}>Send</button>
-          </div>
+      <div className={`chatbot ${isChatOpen ? "open" : ""}`}>
+        <div className="chatbot-header">
+          <h3>Billy - Cyberbullying Support Chatbot</h3>
         </div>
-      )}
-    </div>
+        <div className="chatbot-messages">
+          {messages.map((message, index) => (
+            <div key={index} className={`message ${message.sender}`}>
+              <p>{message.text}</p>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+        <div className="chatbot-input">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Type your message..."
+          />
+          <button onClick={handleSend} disabled={isUploading}>
+            {isUploading ? "Uploading..." : "Send"}
+          </button>
+        </div>
+        <div className="file-upload">
+          <input
+            type="file"
+            onChange={handleFileChange}
+            accept="*/*"
+            id="file-input"
+          />
+          {fileUrl && <p>File uploaded successfully!</p>}
+        </div>
+      </div>
+    </>
   );
 }
 

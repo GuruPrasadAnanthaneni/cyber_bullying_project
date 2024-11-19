@@ -1,27 +1,18 @@
 import React, { useState } from 'react';
 import './App.css';
+import Profile from './components/Profile';
+import Chatbot from './components/Chatbot';
 import logo_icon from './assets/logo.png';
 import bullying_icon from './assets/bullying.png';
-import Login from './components/Login';
-import Signup from './components/Signup';
-import Chatbot from './components/Chatbot';
-import Profile from './components/Profile';
 import profile_logo from './assets/profile_logo.png';
-import ForgotPassword from './components/ForgotPassword';
 
 function App() {
   const [activeComponent, setActiveComponent] = useState('home');
 
   const renderContent = () => {
     switch (activeComponent) {
-      case 'login':
-        return <Login onForgotPassword={() => setActiveComponent('forgotPassword')} onSignupClick={() => setActiveComponent('signup')} />;
-      case 'signup':
-        return <Signup onLoginClick={() => setActiveComponent('login')} />;
       case 'profile':
         return <Profile />;
-      case 'forgotPassword':
-        return <ForgotPassword onBackToLogin={() => setActiveComponent('login')} />;
       default:
         return (
           <div className="content-container">
@@ -53,8 +44,6 @@ function App() {
           <h1>Billy - Buddy against Cyber Bullying</h1>
         </div>
         <div className="nav-buttons">
-          <button onClick={() => setActiveComponent('home')}>Home</button>
-          <button onClick={() => setActiveComponent('login')}>Login</button>
           <button onClick={() => setActiveComponent('active records')}>Active Records</button>
           <button onClick={() => setActiveComponent('history records')}>History Records</button>
           <img

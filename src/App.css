@@ -28,13 +28,14 @@ body, html {
 }
 
 .logo {
-  height: 40px;
+  height: 50px;
   margin-right: 10px;
+  background: transparent; 
 }
 
 .logo-title h1 {
   font-size: 1.5em;
-  color: #bf0b0b;
+  color: #f40808;
   margin: 0;
 }
 
