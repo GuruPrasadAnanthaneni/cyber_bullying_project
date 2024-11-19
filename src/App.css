@@ -30,7 +30,7 @@ body, html {
 .logo {
   height: 50px;
   margin-right: 10px;
-  background: transparent; 
+  mix-blend-mode:darken;
 }
 
 .logo-title h1 {
