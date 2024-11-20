@@ -4,10 +4,10 @@ import './Profile.css'; // Optional: Add styling for profile page
 const Profile = () => {
   // Example user data
   const [userData, setUserData] = useState({
-    name: 'John Doe',
-    email: 'johndoe@example.com',
+    name: 'A Guruprasad',
+    email: 'guruprasad@gmail.com',
     phone: '+1234567890',
-    password: 'password123',
+    password: 'guru123',
   });
 
   const [newPassword, setNewPassword] = useState('');

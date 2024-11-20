@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 import Profile from './components/Profile';
 import Chatbot from './components/Chatbot';
+import ActiveRecords from './components/Activerecords';
+import HistoryRecords from './components/HistoryRecords';
 import logo_icon from './assets/logo.png';
 import bullying_icon from './assets/bullying.png';
 import profile_logo from './assets/profile_logo.png';
@@ -13,6 +15,10 @@ function App() {
     switch (activeComponent) {
       case 'profile':
         return <Profile />;
+        case 'ActiveRecords': 
+          return <ActiveRecords />;
+        case 'HistoryRecords':
+          return <HistoryRecords/>;
       default:
         return (
           <div className="content-container">
@@ -40,12 +46,15 @@ function App() {
       {/* Header */}
       <header className="header">
         <div className="logo-title">
-          <img src={logo_icon} alt="Logo" className="logo" />
+          <img src={logo_icon} alt="Logo" className="logo"
+          onClick={() => window.location.reload()}
+          style={{ cursor: 'pointer' }}
+          />
           <h1>Billy - Buddy against Cyber Bullying</h1>
         </div>
         <div className="nav-buttons">
-          <button onClick={() => setActiveComponent('active records')}>Active Records</button>
-          <button onClick={() => setActiveComponent('history records')}>History Records</button>
+          <button onClick={() => setActiveComponent('ActiveRecords')}>Active Records</button>
+          <button onClick={() => setActiveComponent('HistoryRecords')}>History Records</button>
           <img
             src={profile_logo}
             alt="Profile"
